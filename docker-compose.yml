@@ -2,21 +2,21 @@ version: "2"
 services:
     www:
         build: .
-        ports: 
+        ports:
             - "8001:80"
         volumes:
             - ./www:/var/www/html/
         links:
             - db
+            - postgres
         networks:
             - default
-            - postgresql
         depends_on:
             - db
-            - postgresql
+            - postgres
     db:
-        image: mysql:5.7.13 
-        ports: 
+        image: mysql:5.7.13
+        ports:
             - "3306:3306"
         environment:
             MYSQL_DATABASE: myDb
@@ -30,7 +30,7 @@ services:
             - default
     phpmyadmin:
         image: phpmyadmin
-        links: 
+        links:
             - db:db
         ports:
             - 8000:80
@@ -38,7 +38,7 @@ services:
             MYSQL_USER: user
             MYSQL_PASSWORD: test
             MYSQL_ROOT_PASSWORD: test
-    postgresql:
+    postgres:
         image: postgres:13
         environment:
             POSTGRES_DB: myDb
