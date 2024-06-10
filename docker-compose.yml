@@ -10,10 +10,12 @@ services:
             - db
         networks:
             - default
+            - postgresql
         depends_on:
             - db
+            - postgresql
     db:
-        image: mysql:5.7.13
+        image: mysql:5.7.13 
         ports: 
             - "3306:3306"
         environment:
@@ -22,7 +24,7 @@ services:
             MYSQL_PASSWORD: test
             MYSQL_ROOT_PASSWORD: test
         volumes:
-            - ./dump:/docker-entrypoint-initdb.d
+            - ./dump/m:/docker-entrypoint-initdb.d
             - persistent:/var/lib/mysql
         networks:
             - default
@@ -36,7 +38,20 @@ services:
             MYSQL_USER: user
             MYSQL_PASSWORD: test
             MYSQL_ROOT_PASSWORD: test
+    postgresql:
+        image: postgres:13
+        environment:
+            POSTGRES_DB: myDb
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: test
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./dump/p:/docker-entrypoint-initdb.d
+            - postgres-data:/var/lib/postgresql/data
+        networks:
+            - default
 
-            
 volumes:
     persistent:
+    postgres-data:
